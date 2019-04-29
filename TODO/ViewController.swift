@@ -10,11 +10,18 @@ import UIKit
 
 class TodoListViewController: UITableViewController {
 
+    let defaults = UserDefaults.standard
+    
     var itemArray = [String]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        
+        if let items = defaults.array(forKey: "ToDoListArray") as? [String]
+        {
+            itemArray = items
+        }
     }
  
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
@@ -25,7 +32,11 @@ class TodoListViewController: UITableViewController {
         
         let canncel = UIAlertAction(title: "取消", style: .cancel, handler: nil)
         
-        let action = UIAlertAction(title: "添加项目", style: .default){(action) in self.itemArray.append(textField.text!)
+        let action = UIAlertAction(title: "添加项目", style: .default){(action) in
+            
+            self.itemArray.append(textField.text!)
+            
+            self.defaults.set(self.itemArray, forKey: "ToDoListArray")
             
             self.tableView.reloadData()
         }
